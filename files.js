@@ -5,11 +5,18 @@ export const files = {
       file: {
         contents: `
   import express from 'express';
+  import { JsonApiClient } from '@drupal-api-client/json-api-client';
+
   const app = express();
   const port = 3111;
+
+  const client = new JsonApiClient('https://dev-drupal-api-client-poc.pantheonsite.io');
+
+  const pages = await client.getCollection('node--page');
+  console.log(pages);
   
   app.get('/', (req, res) => {
-    res.send('Welcome to a WebContainers app! 🥳');
+    res.send(JSON.stringify(pages, null, 2));
   });
   
   app.listen(port, () => {
@@ -25,7 +32,8 @@ export const files = {
     "type": "module",
     "dependencies": {
       "express": "latest",
-      "nodemon": "latest"
+      "nodemon": "latest",
+      "@drupal-api-client/json-api-client": "latest"
     },
     "scripts": {
       "start": "nodemon --watch './' index.js"
